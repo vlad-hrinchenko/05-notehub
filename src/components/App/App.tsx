@@ -1,3 +1,4 @@
+/// src/components/App/App.tsx
 import { useState } from "react";
 import {
   useQuery,
@@ -12,16 +13,17 @@ import SearchBox from "../SearchBox/SearchBox";
 import Pagination from "../Pagination/Pagination";
 import css from "./App.module.css";
 import { useDebounce } from "use-debounce";
+import type { NotesResponse } from "../../services/noteService";
 
 const App = () => {
-  const [page, setPage] = useState(1);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [debouncedSearchTerm] = useDebounce(searchTerm, 300);
+  const [page, setPage] = useState<number>(1);
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [debouncedSearchTerm] = useDebounce<string>(searchTerm, 300);
   const queryClient = useQueryClient();
 
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ["notes", page, debouncedSearchTerm],
+  const { data, isLoading, isError } = useQuery<NotesResponse>({
+    queryKey: ["notes", debouncedSearchTerm, page],
     queryFn: () => fetchNotes(page, debouncedSearchTerm),
     placeholderData: keepPreviousData,
   });
@@ -36,8 +38,14 @@ const App = () => {
   return (
     <div className={css.app}>
       <header className={css.toolbar}>
-        <SearchBox value={searchTerm} onChange={setSearchTerm} />
-        {data?.totalPages > 1 && (
+        <SearchBox
+          value={searchTerm}
+          onChange={(value: string) => {
+            setSearchTerm(value);
+            setPage(1);
+          }}
+        />
+        {data?.totalPages && data.totalPages > 1 && (
           <Pagination
             page={page}
             pageCount={data.totalPages}
@@ -52,9 +60,9 @@ const App = () => {
       {isLoading && <p>Loading...</p>}
       {isError && <p>Error loading notes.</p>}
 
-      {data?.results.length > 0 && (
+      {data?.results?.length ? (
         <NoteList notes={data.results} onDelete={deleteMutation.mutate} />
-      )}
+      ) : null}
 
       {isModalOpen && <NoteModal onClose={() => setIsModalOpen(false)} />}
     </div>
