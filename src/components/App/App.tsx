@@ -5,7 +5,7 @@ import {
   useQueryClient,
   keepPreviousData,
 } from "@tanstack/react-query";
-import { fetchNotes, deleteNote } from "../../services/NoteService";
+import { fetchNotes, deleteNote } from "../../services/noteService";
 import NoteList from "../NoteList/NoteList";
 import NoteModal from "../NoteModal/NoteModal";
 import SearchBox from "../SearchBox/SearchBox";
