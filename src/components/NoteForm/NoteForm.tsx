@@ -1,7 +1,8 @@
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createNote } from "../../services/noteService";
+import { createNote } from "../../services/NoteService";
+import type { NoteTag } from "../../types/note";
 import css from "./NoteForm.module.css";
 
 const NoteForm = ({ onClose }: { onClose: () => void }) => {
@@ -16,11 +17,11 @@ const NoteForm = ({ onClose }: { onClose: () => void }) => {
   });
 
   const formik = useFormik({
-    initialValues: { title: "", content: "", tag: "Todo" },
+    initialValues: { title: "", content: "", tag: "Todo" as NoteTag },
     validationSchema: Yup.object({
       title: Yup.string().min(3).max(50).required("Required"),
       content: Yup.string().max(500),
-      tag: Yup.string()
+      tag: Yup.mixed<NoteTag>()
         .oneOf(["Todo", "Work", "Personal", "Meeting", "Shopping"])
         .required("Required"),
     }),

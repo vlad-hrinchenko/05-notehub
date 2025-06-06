@@ -4,3 +4,5 @@ export interface Note {
   content: string;
   tag: "Todo" | "Work" | "Personal" | "Meeting" | "Shopping";
 }
+
+export type NoteTag = Note["tag"];

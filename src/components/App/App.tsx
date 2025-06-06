@@ -1,5 +1,10 @@
 import { useState } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  useQuery,
+  useMutation,
+  useQueryClient,
+  keepPreviousData,
+} from "@tanstack/react-query";
 import { fetchNotes, deleteNote } from "../../services/NoteService";
 import NoteList from "../NoteList/NoteList";
 import NoteModal from "../NoteModal/NoteModal";
@@ -18,7 +23,7 @@ const App = () => {
   const { data, isLoading, isError } = useQuery({
     queryKey: ["notes", page, debouncedSearchTerm],
     queryFn: () => fetchNotes(page, debouncedSearchTerm),
-    keepPreviousData: true,
+    placeholderData: keepPreviousData,
   });
 
   const deleteMutation = useMutation({
@@ -43,6 +48,9 @@ const App = () => {
           Create note +
         </button>
       </header>
+
+      {isLoading && <p>Loading...</p>}
+      {isError && <p>Error loading notes.</p>}
 
       {data?.results.length > 0 && (
         <NoteList notes={data.results} onDelete={deleteMutation.mutate} />
