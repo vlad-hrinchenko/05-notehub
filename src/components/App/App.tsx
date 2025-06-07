@@ -1,4 +1,3 @@
-/// src/components/App/App.tsx
 import { useState } from "react";
 import {
   useQuery,
@@ -13,13 +12,13 @@ import SearchBox from "../SearchBox/SearchBox";
 import Pagination from "../Pagination/Pagination";
 import css from "./App.module.css";
 import { useDebounce } from "use-debounce";
-import type { NotesResponse } from "../../services/noteService";
+import type { NotesResponse } from "../../types/note";
 
 const App = () => {
-  const [page, setPage] = useState<number>(1);
-  const [searchTerm, setSearchTerm] = useState<string>("");
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [debouncedSearchTerm] = useDebounce<string>(searchTerm, 300);
+  const [page, setPage] = useState(1);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [debouncedSearchTerm] = useDebounce(searchTerm, 300);
   const queryClient = useQueryClient();
 
   const { data, isLoading, isError } = useQuery<NotesResponse>({
@@ -40,12 +39,12 @@ const App = () => {
       <header className={css.toolbar}>
         <SearchBox
           value={searchTerm}
-          onChange={(value: string) => {
+          onChange={(value) => {
             setSearchTerm(value);
             setPage(1);
           }}
         />
-        {data?.totalPages && data.totalPages > 1 && (
+        {!!data?.totalPages && data.totalPages > 1 && (
           <Pagination
             page={page}
             pageCount={data.totalPages}
@@ -60,9 +59,9 @@ const App = () => {
       {isLoading && <p>Loading...</p>}
       {isError && <p>Error loading notes.</p>}
 
-      {data?.results?.length ? (
-        <NoteList notes={data.results} onDelete={deleteMutation.mutate} />
-      ) : null}
+      {Array.isArray(data?.notes) && data.notes.length > 0 && (
+        <NoteList notes={data.notes} onDelete={deleteMutation.mutate} />
+      )}
 
       {isModalOpen && <NoteModal onClose={() => setIsModalOpen(false)} />}
     </div>

@@ -1,7 +1,7 @@
-import type { Note } from "../../types/note";
 import css from "./NoteList.module.css";
+import { type Note } from "../../types/note";
 
-export interface NoteListProps {
+interface NoteListProps {
   notes: Note[];
   onDelete: (id: number) => void;
 }
@@ -13,13 +13,8 @@ const NoteList = ({ notes, onDelete }: NoteListProps) => {
         <li key={note.id} className={css.item}>
           <h3>{note.title}</h3>
           <p>{note.content}</p>
-          <span className={css.tag}>{note.tag}</span>
-          <button
-            onClick={() => onDelete(note.id)}
-            className={css.deleteButton}
-          >
-            Delete
-          </button>
+          <span>{note.tag}</span>
+          <button onClick={() => onDelete(note.id)}>Delete</button>
         </li>
       ))}
     </ul>
