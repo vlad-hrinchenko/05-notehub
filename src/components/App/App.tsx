@@ -23,7 +23,7 @@ const App = () => {
 
   const { data, isLoading, isError } = useQuery<NotesResponse>({
     queryKey: ["notes", debouncedSearchTerm, page],
-    queryFn: () => fetchNotes(debouncedSearchTerm, page),
+    queryFn: () => fetchNotes(page, debouncedSearchTerm), // ✅ правильно (number, string)
     placeholderData: keepPreviousData,
   });
 

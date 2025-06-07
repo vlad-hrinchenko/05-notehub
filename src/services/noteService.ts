@@ -1,3 +1,4 @@
+// src/services/noteService.ts
 import axios from "axios";
 import type { Note, NotesResponse } from "../types/note";
 
@@ -8,16 +9,22 @@ const axiosInstance = axios.create({
   },
 });
 
+// ✅ ВИКОРИСТОВУЙ /note — навіть для списку!
 export const fetchNotes = async (
-  searchTerm: string,
-  page: number
+  page: number,
+  searchTerm: string
 ): Promise<NotesResponse> => {
+  const params: Record<string, string | number> = {
+    page,
+    limit: 12,
+  };
+
+  if (searchTerm.trim()) {
+    params.search = searchTerm.trim();
+  }
+
   const { data } = await axiosInstance.get<NotesResponse>("/note", {
-    params: {
-      search: searchTerm,
-      page,
-      limit: 12,
-    },
+    params,
   });
   return data;
 };
