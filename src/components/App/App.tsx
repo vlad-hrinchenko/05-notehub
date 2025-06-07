@@ -1,11 +1,7 @@
+// src/components/App/App.tsx
 import { useState } from "react";
-import {
-  useQuery,
-  useMutation,
-  useQueryClient,
-  keepPreviousData,
-} from "@tanstack/react-query";
-import { fetchNotes, deleteNote } from "../../services/noteService";
+import { useQuery, keepPreviousData } from "@tanstack/react-query";
+import { fetchNotes } from "../../services/noteService";
 import NoteList from "../NoteList/NoteList";
 import NoteModal from "../NoteModal/NoteModal";
 import SearchBox from "../SearchBox/SearchBox";
@@ -15,23 +11,15 @@ import { useDebounce } from "use-debounce";
 import type { NotesResponse } from "../../types/note";
 
 const App = () => {
-  const [page, setPage] = useState(1);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [debouncedSearchTerm] = useDebounce(searchTerm, 300);
-  const queryClient = useQueryClient();
+  const [page, setPage] = useState<number>(1);
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [debouncedSearchTerm] = useDebounce<string>(searchTerm, 300);
 
   const { data, isLoading, isError } = useQuery<NotesResponse>({
     queryKey: ["notes", debouncedSearchTerm, page],
-    queryFn: () => fetchNotes(page, debouncedSearchTerm), // ✅ правильно (number, string)
+    queryFn: () => fetchNotes(page, debouncedSearchTerm),
     placeholderData: keepPreviousData,
-  });
-
-  const deleteMutation = useMutation({
-    mutationFn: deleteNote,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["notes"] });
-    },
   });
 
   return (
@@ -39,7 +27,7 @@ const App = () => {
       <header className={css.toolbar}>
         <SearchBox
           value={searchTerm}
-          onChange={(value) => {
+          onChange={(value: string) => {
             setSearchTerm(value);
             setPage(1);
           }}
@@ -60,7 +48,7 @@ const App = () => {
       {isError && <p>Error loading notes.</p>}
 
       {Array.isArray(data?.notes) && data.notes.length > 0 && (
-        <NoteList notes={data.notes} onDelete={deleteMutation.mutate} />
+        <NoteList notes={data.notes} />
       )}
 
       {isModalOpen && <NoteModal onClose={() => setIsModalOpen(false)} />}

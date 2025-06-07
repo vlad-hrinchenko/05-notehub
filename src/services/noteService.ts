@@ -9,7 +9,7 @@ const axiosInstance = axios.create({
   },
 });
 
-// ✅ ВИКОРИСТОВУЙ /note — навіть для списку!
+// Отримання нотаток
 export const fetchNotes = async (
   page: number,
   searchTerm: string
@@ -29,11 +29,14 @@ export const fetchNotes = async (
   return data;
 };
 
+// Створення нотатки
 export const createNote = async (note: Omit<Note, "id">): Promise<Note> => {
   const { data } = await axiosInstance.post<Note>("/note", note);
   return data;
 };
 
-export const deleteNote = async (id: number): Promise<void> => {
-  await axiosInstance.delete(`/note/${id}`);
+// Видалення нотатки (тепер повертає Note)
+export const deleteNote = async (id: number): Promise<Note> => {
+  const { data } = await axiosInstance.delete<Note>(`/note/${id}`);
+  return data;
 };
