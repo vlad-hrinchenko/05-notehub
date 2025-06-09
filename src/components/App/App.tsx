@@ -11,26 +11,26 @@ import type { NotesResponse } from "../../types/note";
 
 const App = () => {
   const [page, setPage] = useState<number>(1);
-  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [searchText, setSearchText] = useState<string>("");
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [debouncedSearchTerm] = useDebounce<string>(searchTerm, 300);
+  const [debouncedSearchText] = useDebounce<string>(searchText, 300);
 
-  const trimmedSearch = debouncedSearchTerm.trim();
+  const trimmedSearch = debouncedSearchText.trim();
 
   const { data, isLoading, isError } = useQuery<NotesResponse>({
     queryKey: ["notes", trimmedSearch, page],
     queryFn: () => fetchNotes(page, trimmedSearch),
     placeholderData: keepPreviousData,
-    enabled: trimmedSearch.length >= 0, // або: true завжди, якщо потрібен запит без пошуку
+    enabled: trimmedSearch.length >= 0,
   });
 
   return (
     <div className={css.app}>
       <header className={css.toolbar}>
         <SearchBox
-          value={searchTerm}
+          value={searchText}
           onChange={(value: string) => {
-            setSearchTerm(value);
+            setSearchText(value);
             setPage(1);
           }}
         />
