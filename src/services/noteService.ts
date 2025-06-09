@@ -32,9 +32,6 @@ export const fetchNotes = async (
       Authorization: `Bearer ${API_KEY}`,
     },
   });
-
-  console.log('Response fetch:', response.data);
-
   return response.data;
 };
 
