@@ -7,7 +7,6 @@ import SearchBox from "../SearchBox/SearchBox";
 import Pagination from "../Pagination/Pagination";
 import css from "./App.module.css";
 import { useDebounce } from "use-debounce";
-import type { NotesResponse } from "../../types/note";
 
 const App = () => {
   const [page, setPage] = useState<number>(1);
@@ -17,11 +16,11 @@ const App = () => {
 
   const trimmedSearch = debouncedSearchText.trim();
 
-  const { data, isLoading, isError } = useQuery<NotesResponse>({
+  const { data, isLoading, isError } = useQuery({
     queryKey: ["notes", trimmedSearch, page],
-    queryFn: () => fetchNotes(page, trimmedSearch),
+    queryFn: () => fetchNotes(trimmedSearch, page),
     placeholderData: keepPreviousData,
-    enabled: trimmedSearch.length >= 0,
+    enabled: true, // дозволено завжди
   });
 
   return (
