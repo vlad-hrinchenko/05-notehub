@@ -3,7 +3,6 @@ import type { Note } from "../types/note";
 
 const API_KEY = import.meta.env.VITE_NOTEHUB_TOKEN;
 const API_URL = 'https://notehub-public.goit.study/api/notes';
-console.log("TOKEN:", API_KEY);
 
 
 interface NotesResponse {
