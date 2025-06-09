@@ -1,15 +1,13 @@
 // src/types/note.ts
 
+export type NoteTag = "Todo" | "Work" | "Personal" | "Meeting" | "Shopping";
+
 export interface Note {
   id: number;
   title: string;
-  content: string; // 🔧 зроблено обов’язковим
-  tag: "Work" | "Personal" | "Study";
+  content: string; 
+  tag: NoteTag;
 }
-
-// Можна залишити ці типи, якщо вони використовуються у застосунку:
-
-export type NoteTag = "Work" | "Personal" | "Study";
 
 export interface NotesResponse {
   notes: Note[];

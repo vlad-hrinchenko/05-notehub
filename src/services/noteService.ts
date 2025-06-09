@@ -9,7 +9,6 @@ const axiosInstance = axios.create({
   },
 });
 
-// Отримання нотаток
 export const fetchNotes = async (
   page: number,
   searchTerm: string
@@ -23,20 +22,18 @@ export const fetchNotes = async (
     params.search = searchTerm.trim();
   }
 
-  const { data } = await axiosInstance.get<NotesResponse>("/note", {
+  const { data } = await axiosInstance.get<NotesResponse>("/notes", {
     params,
   });
   return data;
 };
 
-// Створення нотатки
 export const createNote = async (note: Omit<Note, "id">): Promise<Note> => {
-  const { data } = await axiosInstance.post<Note>("/note", note);
+  const { data } = await axiosInstance.post<Note>("/notes", note);
   return data;
 };
 
-// Видалення нотатки (тепер повертає Note)
 export const deleteNote = async (id: number): Promise<Note> => {
-  const { data } = await axiosInstance.delete<Note>(`/note/${id}`);
+  const { data } = await axiosInstance.delete<Note>(`/notes/${id}`);
   return data;
 };

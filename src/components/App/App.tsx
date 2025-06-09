@@ -1,4 +1,3 @@
-// src/components/App/App.tsx
 import { useState } from "react";
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import { fetchNotes } from "../../services/noteService";
@@ -16,10 +15,13 @@ const App = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [debouncedSearchTerm] = useDebounce<string>(searchTerm, 300);
 
+  const trimmedSearch = debouncedSearchTerm.trim();
+
   const { data, isLoading, isError } = useQuery<NotesResponse>({
-    queryKey: ["notes", debouncedSearchTerm, page],
-    queryFn: () => fetchNotes(page, debouncedSearchTerm),
+    queryKey: ["notes", trimmedSearch, page],
+    queryFn: () => fetchNotes(page, trimmedSearch),
     placeholderData: keepPreviousData,
+    enabled: trimmedSearch.length >= 0, // або: true завжди, якщо потрібен запит без пошуку
   });
 
   return (
