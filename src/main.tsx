@@ -2,8 +2,8 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./components/App/App";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import "./index.css"; // якщо є
-import "@tanstack/react-query-devtools"; // необов’язково для дебагу
+import "./index.css";
+import "@tanstack/react-query-devtools";
 
 const queryClient = new QueryClient();
 

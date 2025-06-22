@@ -20,7 +20,7 @@ const App = () => {
     queryKey: ["notes", trimmedSearch, page],
     queryFn: () => fetchNotes(trimmedSearch, page),
     placeholderData: keepPreviousData,
-    enabled: true, // дозволено завжди
+    enabled: true,
   });
 
   return (

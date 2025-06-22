@@ -13,8 +13,15 @@ const Pagination = ({ page, pageCount, onPageChange }: PaginationProps) => {
       forcePage={page - 1}
       pageCount={pageCount}
       onPageChange={(e) => onPageChange(e.selected + 1)}
-      containerClassName={css.container}
+      containerClassName={css.pagination}
+      pageClassName=""
+      pageLinkClassName=""
       activeClassName={css.active}
+      previousLabel="<"
+      nextLabel=">"
+      previousClassName=""
+      nextClassName=""
+      breakLabel="..."
     />
   );
 };
